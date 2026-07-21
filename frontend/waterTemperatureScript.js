@@ -1,3 +1,5 @@
+import { waterTemperatureFile } from "./waterTemperatureFile.js";
+
 //-------------------------------------------------------------------------------------
 //GOOGLE CHARTS
 let googleDataArray
@@ -30,23 +32,6 @@ async function drawChart(array, enhet = "Temperatur (°C)") {
     chart.draw(googleDataArray, options);
 }
 
-//-------------------------------------------------------------------------------------
-//FIREBASE 
-
-const firebaseConfig = {
-    apiKey: "AIzaSyDQDHZs3gI26M_JI-NtNvjomFg4hlGR0lE",
-    authDomain: "hovsvannet.firebaseapp.com",
-    databaseURL: "https://hovsvannet-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "hovsvannet",
-    storageBucket: "hovsvannet.appspot.com",
-    messagingSenderId: "895103776628",
-    appId: "1:895103776628:web:8108b99fc7b4ee30405e21"
-};
-
-const app = firebase.initializeApp(firebaseConfig);
-const db = app.database();
-const ref = db.ref('measurements');
-
 //-----------------------------------------------------------------------------------------------
 //Add data from local file to array
 let allData = waterTemperatureFile;
@@ -63,52 +48,52 @@ const hovsvannet = {
             //Display on website
             document.getElementById("lastMeasurement").innerHTML = "Temperaturen Nå: " + lastMeasurementObject[Object.keys(lastMeasurementObject)[0]].temp + "°C"
             document.getElementById("lastMeasurementDate").innerHTML = "Sist oppdatert: " + (new Date(lastMeasurementObject[Object.keys(lastMeasurementObject)[0]].dato*1000)).toString().slice(3,24)
-        
+
         } catch(err){
             console.log("Error retrieving current measurement: ", err)
             document.getElementById("lastMeasurement").innerHTML = "Error: kunne ikke hente data"
             document.getElementById("lastMeasurementDate").innerHTML = ""
         }
-       
+
     },
     updateLastIntervalStigningsgrad: function(array, interval){
         let i = array.length - 1
         while ((array[array.length-1][0] - array[i][0]) < interval){
             i = i - 1
         }
-        //Display on website 
+        //Display on website
         const lastIntervalStigningsgrad = [array[i][0], array[array.length-1][0],(array[array.length-1][1] - array[i][1])]
         document.getElementById("stigning").innerHTML = "Stigning siste time: " + (lastIntervalStigningsgrad[2]).toFixed(2) +"°C"
         document.getElementById("stigningDate").innerHTML = "Stigning i perioden: kl." + (new Date(lastIntervalStigningsgrad[0]*1000)).toString().slice(16,24) + " - kl." + (new Date(lastIntervalStigningsgrad[1]*1000)).toString().slice(16,24)
-    
+
         return lastIntervalStigningsgrad
     },
     getMax: function(dataInterval = this.data, display){
         let currentRecord = dataInterval[0][1]
         let currentArray = dataInterval[0]
-        for (array of dataInterval){ 
+        for (array of dataInterval){
             if (array[1]>currentRecord){
                 currentRecord = array[1]
                 currentArray = array
-            }    
+            }
         }
         if(display === true){
-            document.getElementById("maxRecordTable").innerHTML = "<td>" + currentArray[1] + "°C" + "</td><td style='font-size: 1rem'>" +(new Date(currentArray[0]*1000)).toString().slice(4,24)+"</td>" 
+            document.getElementById("maxRecordTable").innerHTML = "<td>" + currentArray[1] + "°C" + "</td><td style='font-size: 1rem'>" +(new Date(currentArray[0]*1000)).toString().slice(4,24)+"</td>"
         }
         return currentArray
     },
     getMin: function(dataInterval = this.data, display){
         let currentRecord = dataInterval[0][1]
         let currentArray = dataInterval[0]
-        for (array of dataInterval){ 
+        for (array of dataInterval){
             if (array[1]<currentRecord){
                 currentRecord = array[1]
                 currentArray = array
-            }    
+            }
         }
         if(display === true){
-            document.getElementById("minRecordTable").innerHTML = "<td>" + currentArray[1] + "°C" + "</td><td style='font-size: 1rem'>" +(new Date(currentArray[0]*1000)).toString().slice(4,24)+"</td>" 
-        }   
+            document.getElementById("minRecordTable").innerHTML = "<td>" + currentArray[1] + "°C" + "</td><td style='font-size: 1rem'>" +(new Date(currentArray[0]*1000)).toString().slice(4,24)+"</td>"
+        }
         return currentArray
     }
 }
@@ -146,12 +131,14 @@ async function getDataFromDB(){
     //Draw the chart with all the data
     chooseInterval(hovsvannet.graphType, hovsvannet.intervalSize)
 }
+getDataFromDB()
+
 //-----------------------------------------------------------------------------------------------
 //Choose between two dates and show graph for the interval
 
 function chooseInterval(graphType, intervalSize){
     let startDateSelectorValue = document.getElementById("startDateSelector").value
-    let endDateSelectorValue = document.getElementById("endDateSelector").value 
+    let endDateSelectorValue = document.getElementById("endDateSelector").value
     let startDate = (new Date(startDateSelectorValue))/1000
     let endDate = (new Date(endDateSelectorValue))/1000
     //-----------------------------------------------------------------------------------------------
@@ -161,7 +148,7 @@ function chooseInterval(graphType, intervalSize){
 
     if(!startDateSelectorValue || !endDateSelectorValue){
         return document.getElementById("error").innerHTML = "error: <br> velg en startdato og en sluttdato"
-    }  
+    }
     if(startDate >= endDate){
         return document.getElementById("error").innerHTML = "error: <br> velg en startdato som er før sluttdato"
     }
@@ -172,7 +159,7 @@ function chooseInterval(graphType, intervalSize){
         return document.getElementById("error").innerHTML = "error: <br> velg en sluttDato etter: <br>"+new Date(hovsvannet.data[0][0]*1000)
     }
     //-----------------------------------------------------------------------------------------------
-    
+
     let allDataInterval = [];
     for (array of hovsvannet.data){
         if(array[0]>startDate && array[0]<endDate){
@@ -186,7 +173,7 @@ function chooseInterval(graphType, intervalSize){
         case "stigningsgrad":
             drawChart(getShortArray(getStigningsgrad(intervalSize, allDataInterval), "Temperatur °C / " + intervalSizeToText[intervalSize]),  "Temperatur (°C) / " + intervalSizeToText[intervalSize]);
             break;
-        case "normal": 
+        case "normal":
             drawChart(getShortArray(allDataInterval), "Temperatur (°C)");
             break;
     }
@@ -210,7 +197,7 @@ function roundDate(dateOfAverage, dateMethod){
             dateOfAverage.setDate(1);
             dateOfAverage.setHours(0);
             break;
-        case 1: 
+        case 1:
             dateOfAverage.setHours(0)
             break;
     }
@@ -224,9 +211,9 @@ function getAverage(dateMethod, dataInterval){
     for (let i = 0; i < dataInterval.length; i++){
         averageIntervalSum += dataInterval[i][1]
         averageIntervalMeasurements++
-        
+
         if (dateMethods[dateMethod].call(new Date(dataInterval[i][0]*1000))-dateMethods[dateMethod].call(new Date(dataInterval[i+1][0]*1000)) != 0){
-            let dateOfAverage = roundDate(new Date(dataInterval[i][0]*1000),dateMethod) 
+            let dateOfAverage = roundDate(new Date(dataInterval[i][0]*1000),dateMethod)
             averageArray.push([dateOfAverage/1000,averageIntervalSum/averageIntervalMeasurements])
             averageIntervalMeasurements = 0
             averageIntervalSum = 0
@@ -250,7 +237,7 @@ function getStigningsgrad(dateMethod, dataInterval){
     let startArray = dataInterval[0]
     for (let i = 0; i+1 < dataInterval.length; i++){
         if (dateMethods[dateMethod].call(new Date(dataInterval[i][0]*1000))-dateMethods[dateMethod].call(new Date(dataInterval[i+1][0]*1000)) != 0){
-            let date = roundDate(new Date(dataInterval[i][0]*1000),dateMethod) 
+            let date = roundDate(new Date(dataInterval[i][0]*1000),dateMethod)
             stigningsgradArray.push([date/1000,(dataInterval[i][1]-startArray[1])/((dataInterval[i][0]-startArray[0])/size[dateMethod])])
             startArray = dataInterval[i]
         }

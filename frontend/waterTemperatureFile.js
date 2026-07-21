@@ -1,4 +1,4 @@
-const waterTemperatureFile = [
+export const waterTemperatureFile = [
     [1681142166,3.63],
     [1681142826,3.63],
     [1681143473,3.56],
