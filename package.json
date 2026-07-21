@@ -1,0 +1,25 @@
+{
+  "name": "hovsvannet-local",
+  "version": "1.0.0",
+  "description": "PLACEHOLDER",
+  "homepage": "https://github.com/lisaeter/hovsvannet-local#readme",
+  "bugs": {
+    "url": "https://github.com/lisaeter/hovsvannet-local/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lisaeter/hovsvannet-local.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.7.0",
+    "globals": "^17.7.0"
+  }
+}
