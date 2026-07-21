@@ -1,0 +1,11 @@
+{
+  "name": "hovsvannet-local",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint frontend"
+  },
+  "devDependencies": {
+    "eslint": "^10.7.0"
+  }
+}

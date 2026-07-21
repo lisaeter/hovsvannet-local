@@ -264,19 +264,19 @@ function getShortArray(dataInterval, enhet = "Temperatur (°C)"){
 //-----------------------------------------------------------------------------------------------
 //AverageSWITCH
 
-function graphTypeSwitch(){
+export function graphTypeSwitch(){
     hovsvannet.graphType = document.getElementById("graphTypeSelect").value
     chooseInterval(hovsvannet.graphType, hovsvannet.intervalSize)
 }
 
-function intervalSizeSwitch(){
+export function intervalSizeSwitch(){
     hovsvannet.intervalSize = parseInt(document.getElementById("intervalSizeSelect").value)
     chooseInterval(hovsvannet.graphType, hovsvannet.intervalSize)
 }
 
 //-----------------------------------------------------------------------------------------------
 //CHOSE INTERVAL: LAST 24 HOURS, LAST WEEK or LAST MONTH
-function setDataInterval(size){
+export function setDataInterval(size){
         let lastMeasurementDate = new Date(hovsvannet.data[hovsvannet.data.length-1][0]*1000)
         lastMeasurementDate = new Date(lastMeasurementDate.getTime() - lastMeasurementDate.getTimezoneOffset()*60000)
         let startDate = (new Date(lastMeasurementDate.getTime() - size)).toISOString().slice(0,16);
