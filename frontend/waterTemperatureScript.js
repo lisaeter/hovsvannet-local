@@ -90,19 +90,10 @@ const hovsvannet = {
 //-----------------------------------------------------------------------------------------------
 //GETS DATA FROM THE END OF LOCALDATA TO NOW
 
-const endOfWaterTemperatureFile = waterTemperatureFile[waterTemperatureFile.length-1][0];
-
 async function getDataFromDB(){
     //Get last value measured and display on website
     hovsvannet.updateLastMeasurement()
 
-    //Get missing data after local file and add to array with local data
-    const snapshot = await ref.orderByChild('dato').startAt(endOfWaterTemperatureFile).once("value")
-    const DBData = snapshot.val()
-    console.log("Measurements retrieved from DB: ", Object.keys(DBData).length)
-    Object.keys(DBData).forEach(element => {
-        hovsvannet.data.push([DBData[element].dato, DBData[element].temp])
-    });
     //Get stigningsgrad and display on website
     hovsvannet.updateLastIntervalStigningsgrad(hovsvannet.data, size[0])
 
@@ -151,7 +142,7 @@ function chooseInterval(graphType, intervalSize){
     //-----------------------------------------------------------------------------------------------
 
     let allDataInterval = [];
-    for (array of hovsvannet.data){
+    for (let array of hovsvannet.data){
         if(array[0]>startDate && array[0]<endDate){
             allDataInterval.push(array)
         }
@@ -176,7 +167,7 @@ function chooseInterval(graphType, intervalSize){
 //GET THE AVERAGE FOR THE CHOSEN INTERVALL
 
 const dateMethods = [Date.prototype.getHours, Date.prototype.getDate, Date.prototype.getMonth];
-const intervalSizeToText = ["Time", "Dag", "Måned"];
+const intervalSizeToText = ["Time", "Dag", "Måned"]; // TODO: skift til enum elns
 const size = [60*60, 60*60*24, 60*60*24*30];
 
 function roundDate(dateOfAverage, dateMethod){
@@ -254,19 +245,19 @@ function getShortArray(dataInterval, enhet = "Temperatur (°C)"){
 //-----------------------------------------------------------------------------------------------
 //AverageSWITCH
 
-function graphTypeSwitch(){
+export function graphTypeSwitch(){
     hovsvannet.graphType = document.getElementById("graphTypeSelect").value
     chooseInterval(hovsvannet.graphType, hovsvannet.intervalSize)
 }
 
-function intervalSizeSwitch(){
+export function intervalSizeSwitch(){
     hovsvannet.intervalSize = parseInt(document.getElementById("intervalSizeSelect").value)
     chooseInterval(hovsvannet.graphType, hovsvannet.intervalSize)
 }
 
 //-----------------------------------------------------------------------------------------------
 //CHOSE INTERVAL: LAST 24 HOURS, LAST WEEK or LAST MONTH
-function setDataInterval(size){
+export function setDataInterval(size){
         let lastMeasurementDate = new Date(hovsvannet.data[hovsvannet.data.length-1][0]*1000)
         lastMeasurementDate = new Date(lastMeasurementDate.getTime() - lastMeasurementDate.getTimezoneOffset()*60000)
         let startDate = (new Date(lastMeasurementDate.getTime() - size)).toISOString().slice(0,16);
