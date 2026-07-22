@@ -1,4 +1,4 @@
-const waterLevelFile = [
+export const waterLevelFile = [
     [1694980036,280.2],
     [1694980636,280.6],
     [1694981236,280.2],

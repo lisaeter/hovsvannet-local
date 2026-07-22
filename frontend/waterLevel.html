@@ -6,12 +6,9 @@
     <link href="logoHovsvannet.png" sizes="96x96" rel="icon" type="image/png">
     <link rel="stylesheet" href="hovsvannet.css">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap" rel="stylesheet">
-    
-    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-database-compat.js"></script>
+
     <script src="https://www.gstatic.com/charts/loader.js"></script>
-    <script src="waterLevelFile.js"></script>
-    <script src="waterLevelScript.js"></script>
+    <script type="module" src="waterLevelScript.js"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -45,12 +42,12 @@
         <div id="myChart" style="width:100%; max-width:2000px; height:400px; ">laster inn graf...</div>
         <div class="grid">
             <div class="velgIntervallDiv" >
-                <fieldset class="title3" style=" border-radius: 3px; background-color: rgb(5, 50, 65); padding: 10px;"> 
+                <fieldset class="title3" style=" border-radius: 3px; background-color: rgb(5, 50, 65); padding: 10px;">
                     <legend>Velg Periode</legend>
                     <div>
                         <button onclick="setDataInterval(24*60*60*1000)">Siste 24 Timer</button>
                         <button onclick="setDataInterval(7*24*60*60*1000)">Siste Uke</button>
-                        <button onclick="setDataInterval(30*24*60*60*1000)">Siste 30 Dager</button>                      
+                        <button onclick="setDataInterval(30*24*60*60*1000)">Siste 30 Dager</button>
                     </div>
                 </fieldset>
             </div>
@@ -62,7 +59,7 @@
                             <legend>Fra</Frame></legend>
                             <input class="dateInput" style="border:none;" type="datetime-local" oninput="chooseInterval(hovsvannet.graphType, hovsvannet.intervalSize)" id="startDateSelector">
                         </fieldset>
-                        
+
                         <fieldset style="border-radius: 10px; display: inline-block; background-color: rgb(7, 70, 80)">
                             <legend>Til</Frame></legend>
                             <input class="dateInput" style="border:none;" type="datetime-local" oninput="chooseInterval(hovsvannet.graphType, hovsvannet.intervalSize)" id="endDateSelector">
@@ -87,7 +84,7 @@
             </div>
 
             <div class="velgIntervallDiv">
-                <fieldset class="title3" style=" border-radius: 3px; background-color: rgb(5, 50, 65); padding: 10px;"> 
+                <fieldset class="title3" style=" border-radius: 3px; background-color: rgb(5, 50, 65); padding: 10px;">
                     <legend>Rekorder</legend>
                     <div>
                         <table border="2">
@@ -96,10 +93,10 @@
                             </thead>
                             <tbody>
                                 <tr id="maxRecordTable">
-                                
+
                                 </tr>
                             </tbody>
-                            
+
                         </table>
                         <table border="2">
                             <thead>
@@ -107,23 +104,22 @@
                             </thead>
                             <tbody>
                                 <tr id="minRecordTable">
-                                
+
                                 </tr>
                             </tbody>
                         </table>
-                        
+
                     </div>
                 </fieldset>
             </div>
-            
+
         </div>
             <p class="title3" id="error"></p>
-            
-            <p style="text-align: right;"> versjon 2.8 </p>  
+
+            <p style="text-align: right;"> versjon 2.8 </p>
     </div>
     <script>
-        getDataFromDB()
-        
+
         //-------------------------------------------------------------------------------------------------
         //Menu
         function toggleDropdown() {

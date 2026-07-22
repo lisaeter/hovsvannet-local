@@ -35,7 +35,6 @@ async function drawChart(array, enhet = "Temperatur (°C)") {
 //-----------------------------------------------------------------------------------------------
 //Add data from local file to array
 let allData = waterTemperatureFile;
-console.log(allData);
 
 const hovsvannet = {
     data: allData,
