@@ -112,7 +112,6 @@ async function getDataFromDB(){
     //Draw the chart with all the data
     chooseInterval(hovsvannet.graphType, hovsvannet.intervalSize)
 }
-getDataFromDB()
 
 //-----------------------------------------------------------------------------------------------
 //Choose between two dates and show graph for the interval
@@ -266,3 +265,14 @@ export function setDataInterval(size){
         document.getElementById("endDateSelector").value = endDate;
         chooseInterval(hovsvannet.graphType, hovsvannet.intervalSize);
 }
+
+// Webdev is stupid
+Object.assign(window, {
+    hovsvannet,
+    chooseInterval,
+    graphTypeSwitch,
+    intervalSizeSwitch,
+    setDataInterval,
+});
+
+getDataFromDB()
