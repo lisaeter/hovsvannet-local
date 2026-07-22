@@ -35,28 +35,18 @@ async function drawChart(array, enhet = "Temperatur (°C)") {
 //-----------------------------------------------------------------------------------------------
 //Add data from local file to array
 let allData = waterTemperatureFile;
+console.log(allData);
 
 const hovsvannet = {
     data: allData,
     graphType: "normal", //normal, average, stigningsgrad
     intervalSize: 1, //0=hours, 1=days, 2=months
-    updateLastMeasurement: async function(){
-        try{
-            //Get last value measured
-            const lastMeasurementSnapshot = await ref.limitToLast(1).once("value")
-            const lastMeasurementObject = lastMeasurementSnapshot.val()
-            //Display on website
-            document.getElementById("lastMeasurement").innerHTML = "Temperaturen Nå: " + lastMeasurementObject[Object.keys(lastMeasurementObject)[0]].temp + "°C"
-            document.getElementById("lastMeasurementDate").innerHTML = "Sist oppdatert: " + (new Date(lastMeasurementObject[Object.keys(lastMeasurementObject)[0]].dato*1000)).toString().slice(3,24)
-
-        } catch(err){
-            console.log("Error retrieving current measurement: ", err)
-            document.getElementById("lastMeasurement").innerHTML = "Error: kunne ikke hente data"
-            document.getElementById("lastMeasurementDate").innerHTML = ""
-        }
-
+    updateLastMeasurement() {
+          //Display on website
+          document.getElementById("lastMeasurement").innerHTML = "Temperaturen Nå: " + this.data.at(-1)[1] + "°C"
+          document.getElementById("lastMeasurementDate").innerHTML = "Sist oppdatert: " + (this.data.at(-1)[0]*1000).toString().slice(3,24)
     },
-    updateLastIntervalStigningsgrad: function(array, interval){
+    updateLastIntervalStigningsgrad(array, interval) {
         let i = array.length - 1
         while ((array[array.length-1][0] - array[i][0]) < interval){
             i = i - 1
@@ -68,10 +58,10 @@ const hovsvannet = {
 
         return lastIntervalStigningsgrad
     },
-    getMax: function(dataInterval = this.data, display){
+    getMax(dataInterval = this.data, display) {
         let currentRecord = dataInterval[0][1]
         let currentArray = dataInterval[0]
-        for (array of dataInterval){
+        for (let array of dataInterval){
             if (array[1]>currentRecord){
                 currentRecord = array[1]
                 currentArray = array
@@ -82,10 +72,10 @@ const hovsvannet = {
         }
         return currentArray
     },
-    getMin: function(dataInterval = this.data, display){
+    getMin(dataInterval = this.data, display) {
         let currentRecord = dataInterval[0][1]
         let currentArray = dataInterval[0]
-        for (array of dataInterval){
+        for (let array of dataInterval){
             if (array[1]<currentRecord){
                 currentRecord = array[1]
                 currentArray = array
