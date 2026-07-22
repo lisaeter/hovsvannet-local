@@ -1,0 +1,9 @@
+services:
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro # :ro mean read only
+    ports:
+      - 80:80
+      - 443:443
+      - 8000:8000

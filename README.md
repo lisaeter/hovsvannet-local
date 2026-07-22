@@ -1,5 +1,10 @@
 # Hovsvannet
-To test index.html without a backend, you have to disable CORS:
+This is a simple project which only uses nginx as a http server to serve static files in frontend.
+To run the website, first install docker-compose, then run the following command:
+```
+docker compose up -d
+```
+A simple way to test index.html WITHOUT A BACKEND is to disable CORS and open the file directly in the browser:
 ```
 chromium --disable-web-security --user-data-dir="/home/main/Code/temp-chromium-dir/"
 ```
