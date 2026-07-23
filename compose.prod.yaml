@@ -1,0 +1,4 @@
+# This only contains the production OVERWRITES
+services:
+  nginx:
+    ports: !reset []
