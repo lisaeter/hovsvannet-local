@@ -43,7 +43,7 @@ const hovsvannet = {
     updateLastMeasurement() {
           //Display on website
           document.getElementById("lastMeasurement").innerHTML = "Temperaturen Nå: " + this.data.at(-1)[1] + "°C"
-          document.getElementById("lastMeasurementDate").innerHTML = "Sist oppdatert: " + (this.data.at(-1)[0]*1000).toString().slice(3,24)
+          document.getElementById("lastMeasurementDate").innerHTML = "Sist oppdatert: " + (new Date(this.data.at(-1)[0]*1000)).toString().slice(3,24)
     },
     updateLastIntervalStigningsgrad(array, interval) {
         let i = array.length - 1

@@ -8,3 +8,7 @@ A simple way to test index.html WITHOUT A BACKEND is to disable CORS and open th
 ```
 chromium --disable-web-security --user-data-dir="/home/main/Code/temp-chromium-dir/"
 ```
+When testing with backend, remember to hard refresh site to clear cache
+
+----------
+The cloudflared container uses an api key in the environment variable "CLOUDFLARE_TUNNEL_TOKEN". An easy way is to create a file named ".env" in the root folder and add `CLOUDFLARE_TUNNEL_TOKEN=replace-with-token`
