@@ -2,3 +2,9 @@
 services:
   nginx:
     ports: !reset []
+  cloudflared:
+    # Maps host network. Only having this does not affect security,
+    # but be careful when routing traffic through it,
+    # because then you are exposing the host computer to the internet.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

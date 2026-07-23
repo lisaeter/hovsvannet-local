@@ -3,6 +3,8 @@ services:
     image: nginx:latest
     volumes:
       - ./frontend:/usr/share/nginx/html:ro # :ro mean read only
+    # Only need to expose ports to access nginx on host machine,
+    # mainly for development. Cloudflared can always access it.
     ports:
       - 80:80
       - 443:443
