@@ -18,4 +18,6 @@ The cloudflared container uses an api key in the environment variable "CLOUDFLAR
 
 ----------
 ## SSH
-Read [cloudflare docs](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/use-cases/ssh/ssh-cloudflared-authentication/) for how to ssh.
+Run `ssh -F ssh-config ssh.hovsvannet.com`
+
+More information at [cloudflare docs](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/use-cases/ssh/ssh-cloudflared-authentication/)
