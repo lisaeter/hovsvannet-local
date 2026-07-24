@@ -1,5 +1,8 @@
 # Hovsvannet
+## About
 This is a simple project which only uses nginx as a http server to serve static files in frontend.
+
+## Usage
 To run the website, first install docker-compose, then run the following command:
 ```
 docker compose up -d
@@ -10,5 +13,9 @@ chromium --disable-web-security --user-data-dir="/home/main/Code/temp-chromium-d
 ```
 When testing with backend, remember to hard refresh site to clear cache
 
+
+The cloudflared container uses an api key in the environment variable "CLOUDFLARE_TUNNEL_TOKEN". An easy option is to create a file named ".env" in the root folder and add `CLOUDFLARE_TUNNEL_TOKEN=replace-with-token`
+
 ----------
-The cloudflared container uses an api key in the environment variable "CLOUDFLARE_TUNNEL_TOKEN". An easy way is to create a file named ".env" in the root folder and add `CLOUDFLARE_TUNNEL_TOKEN=replace-with-token`
+## SSH
+Read [cloudflare docs](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/use-cases/ssh/ssh-cloudflared-authentication/) for how to ssh.
