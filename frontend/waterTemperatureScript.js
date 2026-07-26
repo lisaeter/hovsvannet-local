@@ -32,7 +32,9 @@ async function drawChart(array, enhet = "Temperatur (°C)") {
 
 //-----------------------------------------------------------------------------------------------
 //Add data from local file to array
-let dataRaw = await fetch("/db/waterTemperatureFile.json");
+let dataRaw = await fetch("/db/waterTemperatureFile.json", {
+  cache: "no-store",
+});
 let dataJSON = await dataRaw.json();
 let allData = dataJSON.measurements;
 

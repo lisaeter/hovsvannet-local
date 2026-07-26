@@ -21,3 +21,5 @@ services:
     volumes:
       - ./rock4cplus:/rock4cplus
       - ./db:/rock4cplus/db
+    devices:
+      - /dev/ttyACM0:/dev/ttyACM0

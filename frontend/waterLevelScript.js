@@ -34,7 +34,9 @@ async function drawChart(array, enhet = "Vannstand (cm)") {
 //Add data from local file to array
 const nullpunkt = 354
 
-let dataRaw = await fetch("/db/waterLevelFile.json");
+let dataRaw = await fetch("/db/waterLevelFile.json", {
+  cache: "no-store",
+});
 let dataJSON = await dataRaw.json();
 let allData = dataJSON.measurements.map(element => [element[0], Math.round(nullpunkt - element[1])]);
 
