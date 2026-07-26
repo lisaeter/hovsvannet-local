@@ -1,5 +1,3 @@
-import { waterLevelFile } from "./db/waterLevelFile.js";
-
 //-------------------------------------------------------------------------------------
 //GOOGLE CHARTS
 let googleDataArray
@@ -36,7 +34,9 @@ async function drawChart(array, enhet = "Vannstand (cm)") {
 //Add data from local file to array
 const nullpunkt = 354
 
-let allData = waterLevelFile.map(element => [element[0], Math.round(nullpunkt - element[1])]);
+let dataRaw = await fetch("/db/waterLevelFile.json");
+let dataJSON = await dataRaw.json();
+let allData = dataJSON.measurements.map(element => [element[0], Math.round(nullpunkt - element[1])]);
 
 const hovsvannet = {
     data: allData,

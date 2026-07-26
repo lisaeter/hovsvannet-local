@@ -1,5 +1,3 @@
-import { waterTemperatureFile } from "./db/waterTemperatureFile.js";
-
 //-------------------------------------------------------------------------------------
 //GOOGLE CHARTS
 let googleDataArray
@@ -34,7 +32,9 @@ async function drawChart(array, enhet = "Temperatur (°C)") {
 
 //-----------------------------------------------------------------------------------------------
 //Add data from local file to array
-let allData = waterTemperatureFile;
+let dataRaw = await fetch("/db/waterTemperatureFile.json");
+let dataJSON = await dataRaw.json();
+let allData = dataJSON.measurements;
 
 const hovsvannet = {
     data: allData,
