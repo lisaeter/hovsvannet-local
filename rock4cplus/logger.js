@@ -1,9 +1,9 @@
-const admin = require("firebase-admin");
-const exec = require('child_process').exec;
-const serialport = require('serialport');
-const Readline = require('@serialport/parser-readline');
+import { exec } from 'node:child_process';
+import serialport from 'serialport';
+import Readline from '@serialport/parser-readline';
+import fs from 'node:fs/promises'
 
-const port = new serialport.SerialPort({ 
+const port = new serialport.SerialPort({
   baudRate: 9600,
   path: "/dev/ttyACM0"
 });
@@ -12,39 +12,34 @@ const parser = new Readline.ReadlineParser({
   delimeter : '\n'
 })
 
-// Fetch the service account key JSON file contents
-var serviceAccount = require("credentials.json");
 
-// Initialize the app with a service account, granting admin privileges
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://hovsvannet-default-rtdb.europe-west1.firebasedatabase.app/"
-});
-
-var db = admin.database();
-const measurements = db.ref('measurements');
-const waterLevelMeasurements = db.ref('waterLevelMeasurements');
 const apiKey = "281932b2-cbc1-4e42-828a-e8fc61549de3";
 const url = "https://badetemperaturer.yr.no/api/registrere";
 
 let temp
-
-let waterTemperatureKey
-let waterLevelKey
 
 // lager ett array for alle 60 measurements i minuttet
 let waterLevelArray = []
 // lager ett array for alle valide measurements
 let validWaterLevelArray = []
 
-async function startMeasurements(){
-    const lastMeasurement = await measurements.limitToLast(1).once('value')
-    waterTemperatureKey = parseInt(Object.keys(lastMeasurement.val())[0])
-    const lastWaterLevelMeasurement = await waterLevelMeasurements.limitToLast(1).once('value')
-    waterLevelKey = parseInt(Object.keys(lastWaterLevelMeasurement.val())[0])
-    console.log('siste waterTemperature-key i databasen: ', waterTemperatureKey)
-    console.log('siste waterLevel-key i databasen: ', waterLevelKey)
-    
+async function readJSON(filePath) {
+  const text = await fs.readFile(filePath, "utf-8");
+  return JSON.parse(text);
+}
+
+async function writeJSON(filePath, data) {
+  const text = JSON.stringify(data);
+  await fs.writeFile(filePath, text, "utf8");
+}
+
+const waterLevelFilePath = "./db/waterLevelFile.json"
+const waterTemperatureFilePath = "./db/waterTemperatureFile.json"
+
+let waterLevel = readJSON(waterLevelFilePath)
+let waterTemperature = readJSON(waterTemperatureFilePath)
+
+async function startMeasurements() {
     // mottar vannstandsdata far arduino
     port.pipe(parser);
     parser.on('data', (data) => {
@@ -60,22 +55,16 @@ async function startMeasurements(){
 
 function getWaterTemperature(){
     try{
-        exec("digitemp_DS9097 -q -t 0", function(error, stdout, stderr){ 
+        exec("digitemp_DS9097 -q -t 0", function(error, stdout, stderr){
         temp = parseFloat(stdout)
         if(temp<50){
-            console.log('waterTemperatureKey: ',waterTemperatureKey); 
-            console.log('temperatur: ',stdout)
-            const date = Math.ceil(((new Date()).getTime())/1000)
-            measurements.update({
-                [waterTemperatureKey]:{
-                temp: temp,
-                dato: date
-                }
-            });
-            waterTemperatureKey++ 
+          console.log('temperatur: ',stdout)
+          const date = Math.ceil(((new Date()).getTime())/1000)
+          waterTemperature.measurements.push([date, temp])
+          writeJSON(waterTemperatureFilePath, waterTemperature)
         }else{
             console.log("Error: temperatur, registrert temperatur: ", temp)
-        } 
+        }
     });
     }
     catch(err){
@@ -89,14 +78,14 @@ async function postRequestYr(){
     const payload = [
             {
             "name": "Hovsvatnet",
-            "lat": 58.49370, 
+            "lat": 58.49370,
             "lon": 6.50388,
             "heatedWater": false,
             "temperature": temp.toFixed(1),
             "time": date
             }
         ];
-    
+
     try{
         const response = await fetch(url, {
             method: 'POST',
@@ -118,16 +107,11 @@ async function getWaterLevel(){
     try{
         // sjekker om det er noen valide measurements og sender da til databasen
         if(validWaterLevelArray[5]){
-            validWaterLevelArray.sort(function(a, b){return a-b});
-            console.log('waterLevelKey: ',waterLevelKey); 
-            console.log("waterlevel: "+ validWaterLevelArray[Math.floor(validWaterLevelArray.length/2)].toFixed(1))
-            waterLevelMeasurements.update({
-                [waterLevelKey]:{
-                level: parseFloat(validWaterLevelArray[Math.floor(validWaterLevelArray.length/2)].toFixed(1)),
-                dato: date
-                }
-            });
-            waterLevelKey++
+          validWaterLevelArray.sort(function (a, b) { return a - b });
+          let medianWaterlevel = validWaterLevelArray[Math.floor(validWaterLevelArray.length / 2)].toFixed(1)
+          console.log("waterlevel: " + medianWaterlevel)
+          waterLevel.measurements.push([date, medianWaterlevel])
+          writeJSON(waterLevelFilePath, waterLevel)
         }else{
             console.log("Error: vannstand, registrerte vannstander: ", waterLevelArray)
         }
