@@ -36,8 +36,8 @@ async function writeJSON(filePath, data) {
 const waterLevelFilePath = "./db/waterLevelFile.json"
 const waterTemperatureFilePath = "./db/waterTemperatureFile.json"
 
-let waterLevel = readJSON(waterLevelFilePath)
-let waterTemperature = readJSON(waterTemperatureFilePath)
+let waterLevel = await readJSON(waterLevelFilePath)
+let waterTemperature = await readJSON(waterTemperatureFilePath)
 
 async function startMeasurements() {
     // mottar vannstandsdata far arduino
