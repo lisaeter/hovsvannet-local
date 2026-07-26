@@ -2,9 +2,10 @@ services:
   nginx:
     image: nginx:latest
     volumes:
-      - ./frontend:/usr/share/nginx/html:ro # :ro mean read only
+      - ./frontend:/usr/share/nginx/html # :ro mean read only
     # Only need to expose ports to access nginx on host machine,
     # mainly for development. Cloudflared can always access it.
+      - ./db:/usr/share/nginx/html/db:ro
     ports:
       - 80:80
       - 443:443
@@ -14,3 +15,9 @@ services:
     command: tunnel run --token ${CLOUDFLARE_TUNNEL_TOKEN}
     depends_on:
       - nginx
+  rock:
+    image: node:latest
+    command: node /rock/rock4cplus/logger.js
+    volumes:
+      - ./rock4cplus:/rock4cplus
+      - ./db:/rock4cplus/db
