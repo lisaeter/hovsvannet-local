@@ -55,13 +55,13 @@ async function startMeasurements() {
 
 function getWaterTemperature(){
     try{
-        exec("digitemp_DS9097 -q -t 0", function(error, stdout, stderr){
+        exec("digitemp_DS9097 -q -t 0", async function(error, stdout, stderr){
         temp = parseFloat(stdout)
         if(temp<50){
           console.log('temperatur: ',stdout)
           const date = Math.ceil(((new Date()).getTime())/1000)
           waterTemperature.measurements.push([date, temp])
-          writeJSON(waterTemperatureFilePath, waterTemperature)
+          await writeJSON(waterTemperatureFilePath, waterTemperature)
         }else{
             console.log("Error: temperatur, registrert temperatur: ", temp)
         }
