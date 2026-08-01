@@ -1,3 +1,0 @@
-# This file is kind of stupid, because it is for client and have hardcoded ssh endpoint. Oh well
-Host ssh.hovsvannet.com
-ProxyCommand cloudflared access ssh --hostname %h

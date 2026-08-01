@@ -1,1 +1,3 @@
 .env
+util_scripts/credentials.json
+node_modules
