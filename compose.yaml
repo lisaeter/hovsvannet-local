@@ -12,9 +12,9 @@ services:
       - 8000:8000
   rock:
     image: node:latest
-    command: node /rock/rock4cplus/logger.js
+    command: node /rock4cplus/logger.js
     volumes:
       - ./rock4cplus:/rock4cplus
       - ./db:/rock4cplus/db
     devices:
-      - /dev/ttyACM0:/dev/ttyACM0
+      - /dev/ttyUSB0:/dev/ttyUSB0
