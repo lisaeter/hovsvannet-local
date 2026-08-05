@@ -10,11 +10,6 @@ services:
       - 80:80
       - 443:443
       - 8000:8000
-  cloudflared:
-    image: cloudflare/cloudflared:latest
-    command: tunnel run --token ${CLOUDFLARE_TUNNEL_TOKEN}
-    depends_on:
-      - nginx
   rock:
     image: node:latest
     command: node /rock/rock4cplus/logger.js
