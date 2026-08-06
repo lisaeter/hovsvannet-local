@@ -21,5 +21,10 @@
     "@eslint/js": "^10.0.1",
     "eslint": "^10.7.0",
     "globals": "^17.7.0"
+  },
+  "dependencies": {
+    "@firebase/app": "^0.16.0",
+    "firebase-admin": "^14.2.0",
+    "serialport": "^13.0.0"
   }
 }
