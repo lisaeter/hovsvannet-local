@@ -1,0 +1,16 @@
+{
+  "name": "rock",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "logger.js",
+  "scripts": {
+    "test": "node logger.js"
+  },
+  "dependencies": {
+    "serialport": "^13.0.0"
+  }
+}

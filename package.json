@@ -1,6 +1,7 @@
 {
   "name": "hovsvannet-local",
   "version": "1.0.0",
+  "private": true,
   "description": "PLACEHOLDER",
   "homepage": "https://github.com/lisaeter/hovsvannet-local#readme",
   "bugs": {
@@ -13,6 +14,9 @@
   "license": "ISC",
   "author": "",
   "type": "module",
+  "workspaces": [
+    "rock4cplus"
+  ],
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -24,7 +28,6 @@
   },
   "dependencies": {
     "@firebase/app": "^0.16.0",
-    "firebase-admin": "^14.2.0",
-    "serialport": "^13.0.0"
+    "firebase-admin": "^14.2.0"
   }
 }
