@@ -5,8 +5,6 @@ services:
   cloudflared:
     image: cloudflare/cloudflared:latest
     command: tunnel run --token ${CLOUDFLARE_TUNNEL_TOKEN}
-    depends_on:
-      - nginx
     # Maps host network. Only having this does not affect security,
     # but be careful when routing traffic through it,
     # because then you are exposing the host computer to the internet.
