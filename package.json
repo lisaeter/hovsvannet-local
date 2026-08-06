@@ -14,9 +14,6 @@
   "license": "ISC",
   "author": "",
   "type": "module",
-  "workspaces": [
-    "rock4cplus"
-  ],
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
