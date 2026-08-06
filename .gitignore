@@ -1,3 +1,5 @@
 .env
 util_scripts/credentials.json
 node_modules
+db/*
+!db/.gitignore

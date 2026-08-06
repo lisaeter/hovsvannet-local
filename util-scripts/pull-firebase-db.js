@@ -30,7 +30,7 @@ measurements.once('value', async (snapshot) => {
 
   const text = `{\n  "measurements": [\n${rows}\n  ]\n}\n`;
 
-  await fs.writeFile("./util-scripts/waterTemperatureFile.json", text, "utf8");
+  await fs.writeFile("./db/waterTemperatureFile.json", text, "utf8");
   process.exit();
 }, (errorObject) => {
   console.log('The read failed: ' + errorObject.name);
