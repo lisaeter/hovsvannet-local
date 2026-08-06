@@ -3,10 +3,23 @@ import serialport from 'serialport';
 import Readline from '@serialport/parser-readline';
 import fs from 'node:fs/promises'
 
-const port = new serialport.SerialPort({
-  baudRate: 9600,
-  path: "/dev/ttyACM0"
-});
+let port;
+try {
+  port = new serialport.SerialPort({
+    baudRate: 9600,
+    path: "/dev/ttyACM0"
+  });
+  // This can maybe cause port to become undefined
+  // at a random time, which can cause other
+  // crashes, but oh well
+  port.on("error", (err) => {
+    console.error("Warning: Serialport ttyACM0 emitted error:\n   ", err.message);
+    port = undefined;
+  });
+} catch (err) {
+  console.error(err);
+  port = undefined;
+}
 
 const parser = new Readline.ReadlineParser({
   delimeter : '\n'
@@ -40,6 +53,7 @@ let waterLevel = await readJSON(waterLevelFilePath)
 let waterTemperature = await readJSON(waterTemperatureFilePath)
 
 async function startMeasurements() {
+  if (!(port == undefined)) {
     // mottar vannstandsdata far arduino
     port.pipe(parser);
     parser.on('data', (data) => {
@@ -48,14 +62,17 @@ async function startMeasurements() {
             validWaterLevelArray.push(parseFloat(data))
         }
     });
-    setInterval(getWaterTemperature ,60000)
     setInterval(getWaterLevel ,60000)
+  } else {
+    console.error("Warning: Could not start waterlevel measurements, port undefined");
+  }
+    setInterval(getWaterTemperature ,60000)
     setInterval(postRequestYr ,1200000)
 }
 
 function getWaterTemperature(){
     try{
-        exec("digitemp_DS9097 -q -t 0", async function(error, stdout, stderr){
+      exec("digitemp_DS9097 -q -t 0", async function (error, stdout, stderr) {
         temp = parseFloat(stdout)
         if(temp<50){
           console.log('temperatur: ',stdout)
@@ -63,7 +80,7 @@ function getWaterTemperature(){
           waterTemperature.measurements.push([date, temp])
           await writeJSON(waterTemperatureFilePath, waterTemperature)
         }else{
-            console.log("Error: temperatur, registrert temperatur: ", temp)
+            console.error("Error: temperatur, registrert temperatur: ", temp, "\n    stderr gave following: ", stderr)
         }
     });
     }
