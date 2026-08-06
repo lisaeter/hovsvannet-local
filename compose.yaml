@@ -11,10 +11,19 @@ services:
       - 443:443
       - 8000:8000
   rock:
-    image: node:latest
-    command: node /rock4cplus/logger.js
+    build:
+      context: ./rock4cplus
+      dockerfile: Dockerfile
+    working_dir: /rock4cplus
+    command: ["node", "--watch", "logger.js"]
     volumes:
-      - ./rock4cplus:/rock4cplus
+      # Should probably move logger.js to src folder,
+      # then just mount the whole folder.
+      # Because now you have to add each file you create.
+      # Or add a dockerignore or something. IDK
+      - ./rock4cplus/logger.js:/rock4cplus/logger.js
       - ./db:/rock4cplus/db
+    # Just comment out devices if you are missing USBtemp
     devices:
       - /dev/ttyUSB0:/dev/ttyUSB0
+    #   - /dev/ttyACM0:/dev/ttyACM0
