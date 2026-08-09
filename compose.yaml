@@ -15,7 +15,10 @@ services:
       context: ./rock4cplus
       dockerfile: Dockerfile
     working_dir: /rock4cplus
-    command: ["node", "--watch", "logger.js"]
+    # Feels bad, but recommended solution
+    command: >
+      sh -c "digitemp_DS9097 -i -s /dev/ttyUSB0
+      && node --watch logger.js"
     volumes:
       # Should probably move logger.js to src folder,
       # then just mount the whole folder.
