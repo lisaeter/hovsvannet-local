@@ -42,24 +42,12 @@ let allData = dataJSON.measurements.map(element => [element[0], Math.round(nullp
 
 const hovsvannet = {
     data: allData,
-    graphType: "normal", //normal, average, stigningsgrad
+    graphType: "normal", //normal, average
     intervalSize: 1, //0=hours, 1=days, 2=months
     updateLastMeasurement() {
           //Display on website
           document.getElementById("lastMeasurement").innerHTML = "Vannstanden Nå: " + Math.round(nullpunkt - this.data.at(-1)[1]) + "cm"
           document.getElementById("lastMeasurementDate").innerHTML = "Sist oppdatert: " + (new Date(this.data.at(-1)[0]*1000)).toString().slice(3,24)
-    },
-    updateLastIntervalStigningsgrad: function(array, interval){
-        let i = array.length - 1
-        while ((array[array.length-1][0] - array[i][0]) < interval){
-            i = i - 1
-        }
-        //Display on website
-        const lastIntervalStigningsgrad = [array[i][0], array[array.length-1][0],(array[array.length-1][1] - array[i][1])]
-        document.getElementById("stigning").innerHTML = "Stigning siste time: " + (lastIntervalStigningsgrad[2]).toFixed(2) +"cm"
-        document.getElementById("stigningDate").innerHTML = "Stigning i perioden: kl." + (new Date(lastIntervalStigningsgrad[0]*1000)).toString().slice(16,24) + " - kl." + (new Date(lastIntervalStigningsgrad[1]*1000)).toString().slice(16,24)
-
-        return lastIntervalStigningsgrad
     },
     getMax: function(dataInterval = this.data, display){
         let currentRecord = dataInterval[0][1]
@@ -96,9 +84,6 @@ const hovsvannet = {
 async function getDataFromDB(){
     //Get last value measured and display on website
     hovsvannet.updateLastMeasurement()
-
-    //Get stigningsgrad and display on website
-    hovsvannet.updateLastIntervalStigningsgrad(hovsvannet.data, size[0])
 
     //Restrict dates available to pick based on data interval
     let date = new Date()
@@ -151,9 +136,6 @@ function chooseInterval(graphType, intervalSize){
     switch(graphType){
         case "average":
             drawChart(getShortArray(getAverage(intervalSize, allDataInterval), "Vannstand (cm) (gjennomsnitt pr. " + intervalSizeToText[intervalSize] + ")"));
-            break;
-        case "stigningsgrad":
-            drawChart(getShortArray(getStigningsgrad(intervalSize, allDataInterval), "Vannstand (cm) / " + intervalSizeToText[intervalSize]),  "Vannstand (cm) / " + intervalSizeToText[intervalSize]);
             break;
         case "normal":
             drawChart(getShortArray(allDataInterval), "Vannstand (cm)");
@@ -209,19 +191,6 @@ function getAverage(dateMethod, dataInterval){
         }
     }
     return averageArray
-}
-
-function getStigningsgrad(dateMethod, dataInterval){
-    let stigningsgradArray = [];
-    let startArray = dataInterval[0]
-    for (let i = 0; i+1 < dataInterval.length; i++){
-        if (dateMethods[dateMethod].call(new Date(dataInterval[i][0]*1000))-dateMethods[dateMethod].call(new Date(dataInterval[i+1][0]*1000)) != 0){
-            let date = roundDate(new Date(dataInterval[i][0]*1000),dateMethod)
-            stigningsgradArray.push([date/1000,(dataInterval[i][1]-startArray[1])/((dataInterval[i][0]-startArray[0])/size[dateMethod])])
-            startArray = dataInterval[i]
-        }
-    }
-    return stigningsgradArray
 }
 
 //-----------------------------------------------------------------------------------------------
