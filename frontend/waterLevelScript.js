@@ -46,7 +46,7 @@ const hovsvannet = {
     intervalSize: 1, //0=hours, 1=days, 2=months
     updateLastMeasurement() {
           //Display on website
-          document.getElementById("lastMeasurement").innerHTML = "Vannstanden Nå: " + Math.round(nullpunkt - this.data.at(-1)[1]) + "cm"
+          document.getElementById("lastMeasurement").innerHTML = "Vannstanden Nå: " + Math.round(this.data.at(-1)[1]) + "cm"
           document.getElementById("lastMeasurementDate").innerHTML = "Sist oppdatert: " + (new Date(this.data.at(-1)[0]*1000)).toString().slice(3,24)
     },
     getMax: function(dataInterval = this.data, display){
