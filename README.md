@@ -15,7 +15,9 @@ To run everything for **production** run:
 ```
 docker compose -f compose.yaml -f compose.prod.yaml up -d
 ```
-The cloudflared container uses an api key in the environment variable "CLOUDFLARE_TUNNEL_TOKEN". An easy option is to create a file named ".env" in the root folder and add `CLOUDFLARE_TUNNEL_TOKEN=replace-with-token`
+The cloudflared container uses an API key in the environment variable "CLOUDFLARE_TUNNEL_TOKEN". An easy option is to create a file named ".env" in the root folder and add `CLOUDFLARE_TUNNEL_TOKEN=replace-with-token`
+
+The rock container also uses an API key. Add a file named ".env" in the rock4cplus folder, such that the path is `./rock4cplus/.env`, and add `YR_API_KEY=replace-with-key`.
 
 When running **production**, you should in general use:
 ```
