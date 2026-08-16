@@ -26,7 +26,10 @@ const parser = new Readline.ReadlineParser({
 })
 
 
-const apiKey = "281932b2-cbc1-4e42-828a-e8fc61549de3";
+// There exists better ways to manage .env files,
+// but this is good enough for now.
+let text = (await fs.readFile(".env")).toString();
+const apiKey = text.trimEnd().split("=")[1];
 const url = "https://badetemperaturer.yr.no/api/registrere";
 
 let temp

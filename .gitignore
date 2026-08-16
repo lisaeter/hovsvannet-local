@@ -1,4 +1,5 @@
 .env
+rock4cplus/.env
 util-scripts/credentials.json
 node_modules
 db/*
