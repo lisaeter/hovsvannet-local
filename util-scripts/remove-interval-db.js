@@ -48,9 +48,24 @@ async function writeJSON(filePath, data) {
   await fs.writeFile(filePath, text, "utf8");
 }
 
-let dataFilePath = "db/waterTemperatureFile.json";
-let data = await readJSON(dataFilePath);
-let editedArr = data.measurements;
-editedArr = removeInterval(editedArr, 1756425600, 1758665658);
-let finalObject = { measurements: editedArr };
+let dataFilePath;
+let data;
+let editedArr;
+let finalObject
+
+// Remove trash from waterTemperatureFile
+dataFilePath = "db/waterTemperatureFile.json";
+data = await readJSON(dataFilePath);
+editedArr = data.measurements;
+// editedArr = removeInterval(editedArr, 1756425600, 1758665658);
+editedArr = removeInterval(editedArr, 1717200000, 1717286400);
+finalObject = { measurements: editedArr };
 writeJSON(dataFilePath, finalObject);
+
+// // Remove trash from waterLevelFile
+// dataFilePath = "db/waterLevelFile.json";
+// data = await readJSON(dataFilePath);
+// editedArr = data.measurements;
+// editedArr = removeInterval(editedArr, 1756425600, 1758665658);
+// finalObject = { measurements: editedArr };
+// writeJSON(dataFilePath, finalObject);
