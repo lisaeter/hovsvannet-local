@@ -35,6 +35,6 @@ When testing with backend, remember to maybe hard refresh site to clear cache
 
 ----------
 ## SSH
-Run `ssh -F ssh-config ssh.hovsvannet.com`
+Run `ssh -F ssh-config <username>@ssh.hovsvannet.com`
 
 More information at [cloudflare docs](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/use-cases/ssh/ssh-cloudflared-authentication/)
