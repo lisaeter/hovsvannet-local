@@ -128,7 +128,7 @@ async function getWaterLevel(){
         // sjekker om det er noen valide measurements og sender da til databasen
         if(validWaterLevelArray[5]){
           validWaterLevelArray.sort(function (a, b) { return a - b });
-          let medianWaterlevel = validWaterLevelArray[Math.floor(validWaterLevelArray.length / 2)].toFixed(1)
+          let medianWaterlevel = parseFloat(validWaterLevelArray[Math.floor(validWaterLevelArray.length / 2)].toFixed(1))
           console.log("waterlevel: " + medianWaterlevel)
           waterLevel.measurements.push([date, medianWaterlevel])
           writeJSON(waterLevelFilePath, waterLevel)
