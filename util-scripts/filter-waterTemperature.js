@@ -1,6 +1,5 @@
-const fs = require("fs/promises");
-
-const os = require("os");
+import fs from "fs/promises";
+import os from "os";
 
 //ALT ER VIBECODET MED CHATGPT
 
