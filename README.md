@@ -2,6 +2,8 @@
 ## About
 This is a simple project which only uses nginx as a http server to serve static files in frontend.
 
+Website is operative at https://hovsvannet.com/
+
 ## Usage
 To run the website and logger for **development**, first install docker-compose, then run the following command:
 ```
